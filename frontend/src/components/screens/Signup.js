@@ -1,29 +1,52 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import M from "materialize-css";
+
+const axios = require("axios");
 
 export default function Signup() {
   const [name, setName] = useState("");
   const [password, setPasword] = useState("");
   const [email, setEmail] = useState("");
+  const navigate = useNavigate();
+
   const postData = () => {
-    fetch("http://localhost:4000/signup", {
+    if (validateEmail(email) == false)
+      return M.toast({ html: "Invalid Email", classes: "#f44336 red" });
+    axios({
       method: "post",
-      Headers: {
+      url: "http://localhost:5000/signup",
+      headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        name,
-        password,
+      data: JSON.stringify({
         email,
+        password,
+        name,
       }),
     })
-      .then((res) => {
-        console.log(res.json());
+      .then(function (response) {
+        // handle success
+        M.toast({
+          html: response.data.message,
+          classes: "#0277bd light-blue darken-3",
+        });
+        navigate("/login");
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(function (error) {
+        // handle error
+        M.toast({ html: error.response.data.message, classes: "#f44336 red" });
+      })
+      .then(function () {
+        // always executed
       });
   };
+  function validateEmail(email) {
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      return true;
+    }
+    return false;
+  }
   return (
     <div className="mycard">
       <div className="input-field card auth-card">
