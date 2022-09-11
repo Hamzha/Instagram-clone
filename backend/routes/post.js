@@ -5,20 +5,21 @@ const requireLogin = require("../middlewere/requireLogin");
 const Post = mongoose.model("Post");
 
 router.post("/createpost", requireLogin, (req, res) => {
-  const { title, body } = req.body;
-  if (!title || !body) {
+  const { title, body, url } = req.body;
+  if (!title || !body || !url) {
     return res.status(422).json({ error: "Please add all the fields." });
   } else {
     req.user.password = undefined;
     const post = new Post({
       title,
       body,
+      url,
       postedBy: req.user,
     });
     post
       .save()
       .then((savedPost) => {
-        res.status(200).json({ post: savedPost });
+        res.status(200).json({ message: savedPost });
       })
       .catch((err) => console.log(err));
   }

@@ -50,17 +50,22 @@ router.post("/signup", (req, res) => {
 router.post("/signin", (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return res.status(422).json({ error: "Please provide email or password." });
+    return res
+      .status(422)
+      .json({ message: "Please provide email or password." });
   } else {
     User.findOne({ email: email })
       .then((savedUser) => {
         if (!savedUser) {
-          return res.status(422).json({ error: "Invalid email or password." });
+          return res
+            .status(422)
+            .json({ message: "Invalid email or password." });
         }
         bycrypt.compare(password, savedUser.password).then((doMatch) => {
           if (doMatch) {
             const token = JWT.sign({ _id: savedUser._id }, JWT_SECRET);
-            res.status(200).json({ token });
+            const { _id, name, email } = savedUser;
+            res.status(200).json({ token, user: { _id, name, email } });
           } else
             res.status(422).json({ message: "Invalid email or password." });
         });

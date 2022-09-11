@@ -19,7 +19,7 @@ export default function Navbar() {
             <Link to="/profile">Profile</Link>
           </li>
           <li>
-            <Link to="/create">Create Post</Link>
+            <Link to="/createPost">Create Post</Link>
           </li>
         </ul>
       </div>
