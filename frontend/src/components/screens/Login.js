@@ -28,6 +28,10 @@ export default function Login() {
           html: "Login Successfully",
           classes: "#0277bd light-blue darken-3",
         });
+        console.log(response);
+        localStorage.setItem("jwt", response.data.token);
+
+        localStorage.setItem("user", JSON.stringify(response.data.user));
         navigate("/");
       })
       .catch(function (error) {

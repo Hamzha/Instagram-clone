@@ -21,42 +21,42 @@ export default function CreatePost() {
         },
       })
       .then(function (res) {
-        setUrl(res.data.url);
+        axios({
+          method: "post",
+          url: "http://localhost:5000/createpost",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("jwt"),
+          },
+          data: JSON.stringify({
+            title,
+            body,
+            url: res.data.url,
+          }),
+        })
+          .then(function (response) {
+            // handle success
+            M.toast({
+              html: "Post Created!",
+              classes: "#0277bd light-blue darken-3",
+            });
+            // navigate("/login");
+          })
+          .catch(function (error) {
+            console.log(error);
+            // handle error
+            M.toast({
+              html: error.response.data.error,
+              classes: "#f44336 red",
+            });
+          })
+          .then(function () {
+            // always executed
+          });
+        // setUrl();
       })
       .catch(function (err) {
         console.log("FAILURE!!", err);
-      });
-
-    axios({
-      method: "post",
-      url: "http://localhost:5000/createpost",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: JSON.stringify({
-        title,
-        body,
-        pic: url,
-      }),
-    })
-      .then(function (response) {
-        // handle success
-        M.toast({
-          html: "Post Created!",
-          classes: "#0277bd light-blue darken-3",
-        });
-        // navigate("/login");
-      })
-      .catch(function (error) {
-        console.log(error);
-        // handle error
-        M.toast({
-          html: error.response.data.error,
-          classes: "#f44336 red",
-        });
-      })
-      .then(function () {
-        // always executed
       });
   };
   return (
