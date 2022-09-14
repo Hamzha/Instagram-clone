@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import M from "materialize-css";
+import { UserContext } from "../../App";
 const axios = require("axios");
 
 export default function Login() {
+  const { state, dispatch } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -28,10 +30,10 @@ export default function Login() {
           html: "Login Successfully",
           classes: "#0277bd light-blue darken-3",
         });
-        console.log(response);
         localStorage.setItem("jwt", response.data.token);
 
         localStorage.setItem("user", JSON.stringify(response.data.user));
+        dispatch({ type: "USER", payload: response.data.user });
         navigate("/");
       })
       .catch(function (error) {
