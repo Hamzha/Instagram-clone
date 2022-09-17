@@ -12,6 +12,17 @@ export default function Navbar() {
         <li>
           <Link to="/createPost">Create Post</Link>
         </li>,
+        <li>
+          <button
+            className="btn waves-effect waves-light #039be5 light-blue darken-1"
+            onClick={() => {
+              localStorage.clear();
+              dispatch({ type: "CLEAR" });
+            }}
+          >
+            Logout``
+          </button>
+        </li>,
       ];
     } else {
       return [
