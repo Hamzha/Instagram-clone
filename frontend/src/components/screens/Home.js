@@ -14,6 +14,7 @@ export default function Home() {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
     }).then((res) => {
+      console.log(res);
       setData(res.data);
     });
   }, []);

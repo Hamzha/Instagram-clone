@@ -1,3 +1,4 @@
+const { text } = require("express");
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
@@ -82,4 +83,25 @@ router.put("/unlike", requireLogin, (req, res) => {
     console.log(err);
   }
 });
+
+router.put("/comment", requireLogin, (req, res) => {
+  const comment = { text: req.body.text, postedBy: req.user._id };
+  try {
+    Post.findByIdAndUpdate(
+      { _id: req.body.postId },
+      {
+        $push: { comments: comment },
+      },
+      { new: true },
+
+      function (err, model) {
+        if (!err) res.json(model);
+        else res.status(422).json({ error: err });
+      }
+    ).populate("comments.postedBy", "_id name");
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 module.exports = router;
