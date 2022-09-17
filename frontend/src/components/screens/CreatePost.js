@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import M from "materialize-css";
+import { useNavigate } from "react-router-dom";
 
 const axios = require("axios");
 
@@ -8,7 +9,7 @@ export default function CreatePost() {
   const [body, setBody] = useState("");
   const [image, setImage] = useState("");
   const [url, setUrl] = useState("");
-
+  const navigate = useNavigate();
   const postDetails = () => {
     var formData = new FormData();
     formData.append("file", image);
@@ -40,7 +41,7 @@ export default function CreatePost() {
               html: "Post Created!",
               classes: "#0277bd light-blue darken-3",
             });
-            // navigate("/login");
+            navigate("/");
           })
           .catch(function (error) {
             console.log(error);
