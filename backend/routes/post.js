@@ -29,6 +29,7 @@ router.post("/createpost", requireLogin, (req, res) => {
 router.post("/allpost", requireLogin, (req, res) => {
   Post.find()
     .populate("postedBy", "_id name")
+    .populate("comments.postedBy", "_by name")
     .then((posts) => {
       res.status(200).json(posts);
     })
@@ -98,7 +99,9 @@ router.put("/comment", requireLogin, (req, res) => {
         if (!err) res.json(model);
         else res.status(422).json({ error: err });
       }
-    ).populate("comments.postedBy", "_id name");
+    )
+      .populate("comments.postedBy", "_id name")
+      .populate("postedBy", "_id name");
   } catch (err) {
     console.log(err);
   }

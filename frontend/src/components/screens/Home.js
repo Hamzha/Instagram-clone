@@ -14,7 +14,6 @@ export default function Home() {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
     }).then((res) => {
-      console.log(res);
       setData(res.data);
     });
   }, []);
@@ -67,6 +66,30 @@ export default function Home() {
       });
   };
 
+  const comment = (text, id) => {
+    axios({
+      method: "put",
+      url: "http://localhost:5000/comment",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+      data: JSON.stringify({
+        postId: id,
+        text: text,
+      }),
+    })
+      .catch((err) => {
+        console.log(err);
+      })
+      .then((res) => {
+        const newData = data.map((item) => {
+          if (item._id == res.data._id) return res.data;
+          else return item;
+        });
+        setData(newData);
+      });
+  };
   return (
     <div className="home">
       {data.map((item) => {
@@ -99,7 +122,24 @@ export default function Home() {
               <h6>{item.likes.length}</h6>
               <h6>{item.title}</h6>
               <p>{item.body}</p>
-              <input type="text" placeholder="add comment" />
+              {item.comments.map((record) => {
+                return (con
+                  <h6>
+                    <span style={{ fontWeight: "600" }}>
+                      {record.postedBy.name}
+                    </span>{" "}
+                    {record.text}
+                  </h6>
+                );
+              })}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  comment(e.target[0].value, item._id);
+                }}
+              >
+                <input type="text" placeholder="add comment" />
+              </form>
             </div>
           </div>
         );
