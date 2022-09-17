@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { UserContext } from "../App";
 export default function Navbar() {
   const { state, dispatch } = useContext(UserContext);
+  const navigate = useNavigate();
   const renderList = () => {
     if (state) {
       return [
@@ -18,9 +19,10 @@ export default function Navbar() {
             onClick={() => {
               localStorage.clear();
               dispatch({ type: "CLEAR" });
+              navigate("/login");
             }}
           >
-            Logout``
+            Logout
           </button>
         </li>,
       ];
