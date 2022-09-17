@@ -90,19 +90,56 @@ export default function Home() {
         setData(newData);
       });
   };
+
+  const deletePost = (postId) => {
+    console.log(postId);
+    axios({
+      method: "delete",
+      url: "http://localhost:5000/deletePost/" + postId,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+    })
+      .catch((err) => {
+        console.log(err);
+      })
+      .then((res) => {
+        console.log(res);
+        const newData = data.filter((item) => {
+          return item._id != res.data.result._id;
+        });
+        setData(newData);
+      });
+  };
+
   return (
     <div className="home">
       {data.map((item) => {
         return (
           <div className="card home-card" key={item._id}>
-            <h5>{item.postedBy.name}</h5>
+            <h5>
+              {item.postedBy.name}
+              {item.postedBy._id == state._id ? (
+                <i
+                  className="material-icons"
+                  onClick={() => {
+                    deletePost(item._id);
+                  }}
+                  style={{ float: "right" }}
+                >
+                  delete
+                </i>
+              ) : (
+                <></>
+              )}
+            </h5>
+
             <div className="card-image">
               <img src={item.photo} />
             </div>
             <div className="card-content">
-              <i className="material-icons" style={{ color: "red" }}>
-                favorite
-              </i>
+              <i className="material-icons">favorite</i>
               {item.likes.includes(state._id) ? (
                 <i
                   className="material-icons"
@@ -123,7 +160,7 @@ export default function Home() {
               <h6>{item.title}</h6>
               <p>{item.body}</p>
               {item.comments.map((record) => {
-                return (con
+                return (
                   <h6>
                     <span style={{ fontWeight: "600" }}>
                       {record.postedBy.name}
