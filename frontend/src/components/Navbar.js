@@ -5,6 +5,7 @@ export default function Navbar() {
   const { state, dispatch } = useContext(UserContext);
   const navigate = useNavigate();
   const renderList = () => {
+    console.log(state);
     if (state) {
       return [
         <li>
