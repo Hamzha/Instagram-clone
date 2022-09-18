@@ -7,7 +7,7 @@ const Post = mongoose.model("Post");
 
 const User = mongoose.model("User");
 
-router.get("/user/:userId", (req, res) => {
+router.get("/user/:userId", requireLogin, (req, res) => {
   User.findById({ _id: req.params.userId })
     .select("-password")
     .then((user) => {
