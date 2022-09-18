@@ -1,6 +1,27 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { UserContext } from "../../App";
+const axios = require("axios");
 
 export default function Profile() {
+  const [posts, setPosts] = useState([]);
+
+  const { state, dispatch } = useContext(UserContext);
+
+  useEffect(() => {
+    axios({
+      method: "post",
+      url: "http://localhost:5000/mypost",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+    }).then((res) => {
+      console.log(res.data);
+      setPosts(res.data);
+      // console.log(res);
+    });
+  }, []);
+
   return (
     <div
       style={{
@@ -24,7 +45,7 @@ export default function Profile() {
           />
         </div>
         <div>
-          <h4>Hamza Ahmed</h4>
+          <h4>{state.name}</h4>
           <div
             style={{
               display: "flex",
@@ -39,34 +60,9 @@ export default function Profile() {
         </div>
       </div>
       <div className="gallery">
-        <img
-          className="item"
-          src="https://images.unsplash.com/photo-1429114753120-0733a750d6c1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDJ8fHBlcnNvbnxlbnwwfDJ8MHx8&auto=format&fit=crop&w=500&q=60"
-        />
-        <img
-          className="item"
-          src="https://images.unsplash.com/photo-1429114753120-0733a750d6c1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDJ8fHBlcnNvbnxlbnwwfDJ8MHx8&auto=format&fit=crop&w=500&q=60"
-        />
-        <img
-          className="item"
-          src="https://images.unsplash.com/photo-1429114753120-0733a750d6c1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDJ8fHBlcnNvbnxlbnwwfDJ8MHx8&auto=format&fit=crop&w=500&q=60"
-        />
-        <img
-          className="item"
-          src="https://images.unsplash.com/photo-1429114753120-0733a750d6c1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDJ8fHBlcnNvbnxlbnwwfDJ8MHx8&auto=format&fit=crop&w=500&q=60"
-        />
-        <img
-          className="item"
-          src="https://images.unsplash.com/photo-1429114753120-0733a750d6c1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDJ8fHBlcnNvbnxlbnwwfDJ8MHx8&auto=format&fit=crop&w=500&q=60"
-        />
-        <img
-          className="item"
-          src="https://images.unsplash.com/photo-1429114753120-0733a750d6c1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDJ8fHBlcnNvbnxlbnwwfDJ8MHx8&auto=format&fit=crop&w=500&q=60"
-        />
-        <img
-          className="item"
-          src="https://images.unsplash.com/photo-1429114753120-0733a750d6c1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDJ8fHBlcnNvbnxlbnwwfDJ8MHx8&auto=format&fit=crop&w=500&q=60"
-        />
+        {posts.map((item) => {
+          return <img key={item._id} className="item" src={item.photo} />;
+        })}
       </div>
     </div>
   );
