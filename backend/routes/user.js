@@ -26,4 +26,36 @@ router.get("/user/:userId", requireLogin, (req, res) => {
     });
 });
 
+
+router.put("/follow", requireLogin, (req, res) => {
+  try {
+    Post.findByIdAndUpdate(
+      { _id: req.body.followId },
+      {
+        $push: { followers: req.user._id },
+      },
+      { new: true },
+      function (err, model) {
+        if (!err) {
+          Post.findByIdAndUpdate(
+            { _id: req.user._id },
+            {
+              $push: { following: req.body.followId },
+            },
+            { new: true },
+            function (err, model) {
+              if (!err) res.json(model)
+              else res.status(422).json({ error: err });
+            }
+          )
+
+        }
+        else res.status(422).json({ error: err });
+      }
+    );
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 module.exports = router;
