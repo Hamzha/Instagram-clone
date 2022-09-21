@@ -16,7 +16,6 @@ export default function Profile() {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
     }).then((res) => {
-      console.log(res.data);
       setPosts(res.data);
       // console.log(res);
     });
@@ -53,9 +52,9 @@ export default function Profile() {
               width: "108%",
             }}
           >
-            <h6>40 Posts</h6>
-            <h6>40 Followers</h6>
-            <h6>40 Following</h6>
+            <h6>{posts.length} Posts</h6>
+            <h6>{state.followers.length} Followers</h6>
+            <h6>{state.following.length} Following</h6>
           </div>
         </div>
       </div>

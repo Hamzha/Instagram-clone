@@ -18,10 +18,10 @@ export default function UserProfile() {
       },
     }).then((res) => {
       setProfile(res.data);
-      // console.log(res.data);
+      // res.data.user.followers.indexOf(state._id) > -1 ? setShowFollow(true) : setShowFollow(true)
     });
   }, []);
-
+  useEffect(() => { console.log('--', showFollow) }, [showFollow])
   const follow = () => {
     axios({
       method: "put",
@@ -35,7 +35,6 @@ export default function UserProfile() {
       }),
     })
       .catch((err) => {
-        console.log(err);
       })
       .then((res) => {
         dispatch({ type: 'UPDATE', payload: { following: res.data.following, followers: res.data.followers } })
@@ -72,7 +71,6 @@ export default function UserProfile() {
 
         setProfile((prevState) => {
           const newFollower = prevState.user.followers.filter(item => item != res.data._id)
-          console.log(newFollower)
           return {
             ...prevState, user: { ...prevState.user, followers: newFollower }
           }
@@ -122,6 +120,7 @@ export default function UserProfile() {
                 <h6>{profile.posts.length} Posts</h6>
                 <h6>{profile.user.followers.length} Followers</h6>
                 <h6>{profile.user.following.length} Following</h6>
+
                 {showFollow ? <button
                   className="btn waves-effect waves-light #039be5 light-blue darken-1"
                   onClick={follow}
