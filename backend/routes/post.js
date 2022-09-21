@@ -127,4 +127,16 @@ router.delete("/deletePost/:postId", requireLogin, (req, res) => {
     });
 });
 
+
+router.post("/getsubpost", requireLogin, (req, res) => {
+  Post.find({ postedBy: { $in: req.user.following } })
+    .populate("postedBy", "_id name")
+    .populate("comments.postedBy", "_by name")
+    .then((posts) => {
+      res.status(200).json(posts);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
 module.exports = router;
