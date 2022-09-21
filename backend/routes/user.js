@@ -29,7 +29,7 @@ router.get("/user/:userId", requireLogin, (req, res) => {
 
 router.put("/follow", requireLogin, (req, res) => {
   try {
-    Post.findByIdAndUpdate(
+    User.findByIdAndUpdate(
       { _id: req.body.followId },
       {
         $push: { followers: req.user._id },
@@ -37,18 +37,48 @@ router.put("/follow", requireLogin, (req, res) => {
       { new: true },
       function (err, model) {
         if (!err) {
-          Post.findByIdAndUpdate(
+          User.findByIdAndUpdate(
             { _id: req.user._id },
             {
               $push: { following: req.body.followId },
             },
             { new: true },
-            function (err, model) {
-              if (!err) res.json(model)
+            function (err, model1) {
+              if (!err) res.json(model1)
               else res.status(422).json({ error: err });
             }
-          )
+          ).select('-password')
 
+        }
+        else res.status(422).json({ error: err });
+      }
+    );
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.put("/unfollow", requireLogin, (req, res) => {
+  try {
+    User.findByIdAndUpdate(
+      { _id: req.body.followId },
+      {
+        $pull: { followers: req.user._id },
+      },
+      { new: true },
+      function (err, model) {
+        if (!err) {
+          User.findByIdAndUpdate(
+            { _id: req.user._id },
+            {
+              $pull: { following: req.body.followId },
+            },
+            { new: true },
+            function (err, model1) {
+              if (!err) res.json(model1)
+              else res.status(422).json({ error: err });
+            }
+          ).select('-password')
         }
         else res.status(422).json({ error: err });
       }
