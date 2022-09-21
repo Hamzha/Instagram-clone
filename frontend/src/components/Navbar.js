@@ -14,6 +14,9 @@ export default function Navbar() {
           <Link to="/createPost">Create Post</Link>
         </li>,
         <li>
+          <Link to="/myfollowingpost">My Following Posts</Link>
+        </li>,
+        <li>
           <button
             className="btn waves-effect waves-light #039be5 light-blue darken-1"
             onClick={() => {
