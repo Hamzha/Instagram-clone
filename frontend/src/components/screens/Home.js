@@ -119,7 +119,7 @@ export default function Home() {
       {data.map((item) => {
         return (
           <div className="card home-card" key={item._id}>
-            <h5>
+            <h5 style={{ padding: '10px' }}>
               <Link
                 to={
                   item.postedBy._id !== state._id
@@ -147,7 +147,7 @@ export default function Home() {
             <div className="card-image">
               <img src={item.photo} />
             </div>
-            <div className="card-content">
+            <div style={{ padding: '10px' }} className="card-content">
               <i className="material-icons">favorite</i>
               {item.likes.includes(state._id) ? (
                 <i
