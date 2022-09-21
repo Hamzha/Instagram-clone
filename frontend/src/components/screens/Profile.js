@@ -45,6 +45,8 @@ export default function Profile() {
         </div>
         <div>
           <h4>{state.name}</h4>
+          <h5>{state.email}</h5>
+
           <div
             style={{
               display: "flex",
