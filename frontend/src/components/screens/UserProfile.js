@@ -7,7 +7,8 @@ export default function UserProfile() {
   const [profile, setProfile] = useState();
   const { state, dispatch } = useContext(UserContext);
   const { userId } = useParams();
-  const [showFollow, setShowFollow] = useState(true)
+
+  const [showFollow, setShowFollow] = useState(!state.followers.includes(userId))
   useEffect(() => {
     axios({
       method: "get",
