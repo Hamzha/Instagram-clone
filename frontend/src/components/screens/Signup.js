@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import M from "materialize-css";
 
@@ -11,7 +11,8 @@ export default function Signup() {
   const [image, setImage] = useState('')
   const [url, setUrl] = useState('')
   const navigate = useNavigate();
-  const postDetails = () => {
+
+  const uploadPic = () => {
     var formData = new FormData();
     formData.append("file", image);
     formData.append("upload_preset", "insta-clone");
@@ -22,9 +23,13 @@ export default function Signup() {
           "Content-Type": "multipart/form-data",
         },
       })
-      .then((res) => { setUrl(res.data.url) }).catch((err) => { console.log(err) })
+      .then((res) => {
+        setUrl(res.data.url);
+        // uploadFields()
+      }).catch((err) => { console.log(err) })
   }
-  const postData = () => {
+
+  const uploadFields = () => {
     if (validateEmail(email) == false)
       return M.toast({ html: "Invalid Email", classes: "#f44336 red" });
     axios({
@@ -37,6 +42,7 @@ export default function Signup() {
         email,
         password,
         name,
+        pic: url
       }),
     })
       .then(function (response) {
@@ -54,6 +60,21 @@ export default function Signup() {
       .then(function () {
         // always executed
       });
+  }
+  useEffect(() => {
+    if (url) {
+      uploadFields()
+    }
+  }, [url])
+
+  const postData = () => {
+    if (image) {
+      uploadPic()
+    } else {
+      uploadFields()
+    }
+
+
   };
   function validateEmail(email) {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
