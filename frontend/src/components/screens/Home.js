@@ -93,7 +93,6 @@ export default function Home() {
   };
 
   const deletePost = (postId) => {
-    console.log(postId);
     axios({
       method: "delete",
       url: "http://localhost:5000/deletePost/" + postId,

@@ -7,8 +7,7 @@ const JWT = require("jsonwebtoken");
 const { JWT_SECRET } = require("../keys");
 
 router.post("/signup", (req, res) => {
-  console.log(req.body);
-  const { name, email, password } = req.body;
+  const { name, email, password, pic } = req.body;
 
   if (!email || !name || !password) {
     return res.status(422).json({ message: "Please add all parameters" });
@@ -28,6 +27,7 @@ router.post("/signup", (req, res) => {
               email,
               password: hashPassword,
               name,
+              pic
             });
             user
               .save()
@@ -64,8 +64,8 @@ router.post("/signin", (req, res) => {
         bycrypt.compare(password, savedUser.password).then((doMatch) => {
           if (doMatch) {
             const token = JWT.sign({ _id: savedUser._id }, JWT_SECRET);
-            const { _id, name, email, followers, following } = savedUser;
-            res.status(200).json({ token, user: { _id, name, email, followers, following } });
+            const { _id, name, email, pic, followers, following } = savedUser;
+            res.status(200).json({ token, user: { _id, name, email, followers, following, pic } });
           } else
             res.status(422).json({ message: "Invalid email or password." });
         });

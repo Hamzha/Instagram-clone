@@ -7,7 +7,8 @@ export default function UserProfile() {
   const [profile, setProfile] = useState();
   const { state, dispatch } = useContext(UserContext);
   const { userId } = useParams();
-  const [showFollow, setShowFollow] = useState(true)
+
+  const [showFollow, setShowFollow] = useState(!state.followers.includes(userId))
   useEffect(() => {
     axios({
       method: "get",
@@ -21,7 +22,6 @@ export default function UserProfile() {
       // res.data.user.followers.indexOf(state._id) > -1 ? setShowFollow(true) : setShowFollow(true)
     });
   }, []);
-  useEffect(() => { console.log('--', showFollow) }, [showFollow])
   const follow = () => {
     axios({
       method: "put",
@@ -40,7 +40,6 @@ export default function UserProfile() {
         dispatch({ type: 'UPDATE', payload: { following: res.data.following, followers: res.data.followers } })
         localStorage.setItem('user', JSON.stringify(
           res.data))
-        console.log(res)
         setProfile((prevState) => {
           return {
             ...prevState, user: { ...prevState.user, followers: [...prevState.user.followers, res.data._id] }
@@ -103,7 +102,7 @@ export default function UserProfile() {
                   height: "160px",
                   borderRadius: "80px",
                 }}
-                src="https://images.unsplash.com/photo-1523983254932-c7e6571c9d60?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjV8fHBlcnNvbnxlbnwwfDJ8MHx8&auto=format&fit=crop&w=500&q=60"
+                src={profile.user.pic}
               />
             </div>
             <div>

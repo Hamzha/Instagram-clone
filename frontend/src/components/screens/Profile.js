@@ -17,7 +17,6 @@ export default function Profile() {
       },
     }).then((res) => {
       setPosts(res.data);
-      // console.log(res);
     });
   }, []);
 
@@ -40,7 +39,7 @@ export default function Profile() {
         <div>
           <img
             style={{ width: "160px", height: "160px", borderRadius: "80px" }}
-            src="https://images.unsplash.com/photo-1523983254932-c7e6571c9d60?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjV8fHBlcnNvbnxlbnwwfDJ8MHx8&auto=format&fit=crop&w=500&q=60"
+            src={state ? state.pic : 'Loading'}
           />
         </div>
         <div>
